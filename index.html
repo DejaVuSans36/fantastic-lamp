@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Image/Video Share Platform</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+
+    #container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    #upload-form {
+      margin-bottom: 20px;
+    }
+
+    #upload-form input[type="file"] {
+      display: none;
+    }
+
+    #upload-form label {
+      display: inline-block;
+      padding: 10px 20px;
+      background-color: #007bff;
+      color: #fff;
+      cursor: pointer;
+    }
+
+    #uploaded-files {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      grid-gap: 20px;
+    }
+
+    .file-item {
+      border: 1px solid #ccc;
+      padding: 10px;
+    }
+
+    .file-item img,
+    .file-item video {
+      max-width: 100%;
+      height: auto;
+    }
+  </style>
+</head>
+<body>
+  <div id="container">
+    <h1>Image/Video Share Platform</h1>
+
+    <form id="upload-form" enctype="multipart/form-data">
+      <input type="file" id="file-input" multiple>
+      <label for="file-input">Upload Files</label>
+    </form>
+
+    <div id="uploaded-files"></div>
+  </div>
+
+  <script>
+    function handleFileUpload(event) {
+      const files = event.target.files;
+
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        const fileReader = new FileReader();
+
+        fileReader.onload = function (e) {
+          const fileItem = document.createElement("div");
+          fileItem.className = "file-item";
+
+          if (file.type.includes("image")) {
+            const img = document.createElement("img");
+            img.src = e.target.result;
+            fileItem.appendChild(img);
+          } else if (file.type.includes("video")) {
+            const video = document.createElement("video");
+            video.src = e.target.result;
+            video.controls = true;
+            fileItem.appendChild(video);
+          }
+
+          document.getElementById("uploaded-files").appendChild(fileItem);
+        };
+
+        fileReader.readAsDataURL(file);
+      }
+    }
+
+    document.getElementById("file-input").addEventListener("change", handleFileUpload);
+  </script>
+</body>
+</html>
